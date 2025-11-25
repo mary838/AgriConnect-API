@@ -65,6 +65,11 @@ export const login = async (req: Request, res: Response) => {
       "role_id"
     );
     const roleNames = userRoles.map((ur) => (ur.role_id as any).name);
+    if (roleNames.includes("admin")) {
+      ["farmer", "customer"].forEach((r) => {
+        if (!roleNames.includes(r)) roleNames.push(r);
+      });
+    }
 
     const token = jwt.sign({ id: user._id, roles: roleNames }, JWT_SECRET, {
       expiresIn: "12h",

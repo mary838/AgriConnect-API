@@ -5,7 +5,6 @@ import { User } from "../models/User";
 import { Role } from "../models/Role";
 import { UserRole } from "../models/UserRole";
 
-// Load .env variables
 dotenv.config();
 
 const MONGO_URI =
@@ -16,8 +15,8 @@ async function seedAdmin() {
     console.log("Connecting to MongoDB:", MONGO_URI);
     await mongoose.connect(MONGO_URI);
 
-    // ===== Ensure roles exist =====
-    const roles = ["admin", "customer"];
+    // Roles: admin, farmer, customer
+    const roles = ["admin", "farmer", "customer"];
     const roleDocs: Record<string, any> = {};
 
     for (const roleName of roles) {
@@ -31,10 +30,9 @@ async function seedAdmin() {
       roleDocs[roleName] = role;
     }
 
-    // ===== Create or update admin user =====
+    // Admin user
     const adminEmail = "admin@example.com";
-    const adminPassword = "Admin@123"; // fixed password for seeding
-
+    const adminPassword = "Admin@123";
     let adminUser = await User.findOne({ email: adminEmail });
     const hashedPassword = await bcrypt.hash(adminPassword, 10);
 
@@ -48,25 +46,26 @@ async function seedAdmin() {
       });
       console.log("✅ Created admin user");
     } else {
-      // Update password in case it was wrong
       adminUser.password = hashedPassword;
       await adminUser.save();
       console.log("ℹ️ Admin user already exists, password updated");
     }
 
-    // ===== Ensure UserRole mapping =====
-    const existsUR = await UserRole.findOne({
-      user_id: adminUser._id,
-      role_id: roleDocs["admin"]._id,
-    });
-    if (!existsUR) {
-      await UserRole.create({
+    // Assign all 3 roles to admin
+    for (const roleName of roles) {
+      const existsUR = await UserRole.findOne({
         user_id: adminUser._id,
-        role_id: roleDocs["admin"]._id,
+        role_id: roleDocs[roleName]._id,
       });
-      console.log("✅ Assigned admin role to user");
-    } else {
-      console.log("ℹ️ UserRole mapping exists");
+      if (!existsUR) {
+        await UserRole.create({
+          user_id: adminUser._id,
+          role_id: roleDocs[roleName]._id,
+        });
+        console.log(`✅ Assigned role ${roleName} to admin`);
+      } else {
+        console.log(`ℹ️ UserRole mapping exists for ${roleName}`);
+      }
     }
 
     console.log("🎉 Seeding finished successfully");

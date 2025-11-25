@@ -1,24 +1,14 @@
-// import mongoose, { Schema, Document } from "mongoose";
+import { Schema, model, Document } from "mongoose";
 
-// export interface IRole extends Document {
-//   name: string;
-// }
-
-// const RoleSchema: Schema = new Schema(
-//   { name: { type: String, required: true, unique: true } },
-//   { timestamps: true }
-// );
-
-// export const Role =
-//   mongoose.models.Role || mongoose.model<IRole>("Role", RoleSchema);
-import mongoose, { Schema, Document } from "mongoose";
-
-interface IRole extends Document {
+export interface IRole extends Document {
   name: string;
 }
 
-const roleSchema = new Schema<IRole>({
-  name: { type: String, required: true, unique: true },
-});
+const RoleSchema = new Schema<IRole>(
+  {
+    name: { type: String, required: true, unique: true },
+  },
+  { timestamps: true }
+);
 
-export const Role = mongoose.model<IRole>("Role", roleSchema);
+export const Role = model<IRole>("Role", RoleSchema);

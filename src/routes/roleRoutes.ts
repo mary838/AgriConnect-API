@@ -26,7 +26,7 @@ const router = Router();
  *       201:
  *         description: Role created successfully
  */
-router.post("/roles", authMiddleware, roleMiddleware(["admin"]), createRole);
+router.post("/", authMiddleware, roleMiddleware(["admin"]), createRole);
 
 /**
  * @swagger
@@ -41,6 +41,6 @@ router.post("/roles", authMiddleware, roleMiddleware(["admin"]), createRole);
  *       200:
  *         description: List of roles
  */
-router.get("/roles", authMiddleware, roleMiddleware(["admin"]), getRoles);
+router.get("/", authMiddleware, roleMiddleware(["admin"]), getRoles);
 
 export default router;
