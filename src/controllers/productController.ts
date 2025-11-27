@@ -41,12 +41,12 @@ export const updateProduct = async (req: Request, res: Response) => {
   // Only farmer owner or admin can update
   if (
     req.user.roles.includes("farmer") &&
-    product.farmer_id.toString() !== req.user.id &&
+    product.farmer_id?.toString() !== req.user.id &&
     !req.user.roles.includes("admin")
   ) {
     return res.status(403).json({ message: "Forbidden: not your product" });
   }
-
+  // Update product
   Object.assign(product, req.body);
   await product.save();
   res.json(product);
@@ -60,12 +60,12 @@ export const deleteProduct = async (req: Request, res: Response) => {
   // Only farmer owner or admin can delete
   if (
     req.user.roles.includes("farmer") &&
-    product.farmer_id.toString() !== req.user.id &&
+    product.farmer_id?.toString() !== req.user.id &&
     !req.user.roles.includes("admin")
   ) {
     return res.status(403).json({ message: "Forbidden: not your product" });
   }
-
+  // Delete product
   await product.deleteOne();
   res.json({ message: "Product deleted" });
 };

@@ -8,7 +8,7 @@ import { UserRole } from "../models/UserRole";
 dotenv.config();
 
 const MONGO_URI =
-  process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/your_db_name";
+  process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/agri_connect";
 
 async function seedAdmin() {
   try {
@@ -23,9 +23,9 @@ async function seedAdmin() {
       let role = await Role.findOne({ name: roleName });
       if (!role) {
         role = await Role.create({ name: roleName });
-        console.log(`✅ Created role: ${roleName}`);
+        console.log(` Created role: ${roleName}`);
       } else {
-        console.log(`ℹ️ Role exists: ${roleName}`);
+        console.log(`ℹ Role exists: ${roleName}`);
       }
       roleDocs[roleName] = role;
     }
@@ -44,11 +44,11 @@ async function seedAdmin() {
         phone: "087420679",
         status: "active",
       });
-      console.log("✅ Created admin user");
+      console.log(" Created admin user");
     } else {
       adminUser.password = hashedPassword;
       await adminUser.save();
-      console.log("ℹ️ Admin user already exists, password updated");
+      console.log(" Admin user already exists, password updated");
     }
 
     // Assign all 3 roles to admin
@@ -62,15 +62,15 @@ async function seedAdmin() {
           user_id: adminUser._id,
           role_id: roleDocs[roleName]._id,
         });
-        console.log(`✅ Assigned role ${roleName} to admin`);
+        console.log(`Assigned role ${roleName} to admin`);
       } else {
-        console.log(`ℹ️ UserRole mapping exists for ${roleName}`);
+        console.log(` UserRole mapping exists for ${roleName}`);
       }
     }
 
-    console.log("🎉 Seeding finished successfully");
+    console.log(" Seeding finished successfully");
   } catch (err) {
-    console.error("❌ Seed error:", err);
+    console.error(" Seed error:", err);
   } finally {
     await mongoose.disconnect();
     process.exit(0);

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import authRoutes from "./authRoutes";
 import roleroutes from "./roleRoutes";
-import farmerRoutes from "./createUserRoutes";
+import createUserRoutes from "./userRoutes";
 
 import profileRoutes from "./profile.routes";
 
@@ -12,5 +12,5 @@ const router = Router();
 router.use("/auth", authRoutes);
 router.use("/roles", roleroutes);
 router.use("/user", profileRoutes);
-router.use(farmerRoutes);
+router.use("/users", createUserRoutes);
 export default router;

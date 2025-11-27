@@ -6,9 +6,9 @@ import {
   updateProduct,
   deleteProduct,
 } from "../controllers/productController";
-
+// Middleware
 import { authMiddleware, roleMiddleware } from "../middleware/authmiddleware";
-
+// Router instance
 const router = Router();
 
 /**
@@ -56,7 +56,7 @@ router.post(
   roleMiddleware(["farmer", "admin"]),
   createProduct
 );
-
+// api products
 /**
  * @swagger
  * /api/products:
